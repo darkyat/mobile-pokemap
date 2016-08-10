@@ -17,6 +17,7 @@
       Harald Haas
   </author>
 
-  <access origin="*" />
+  <!-- We'll include the Barcode plugin as an example -->
+  <plugin name="cordova-plugin-whitelist" />
 
 </widget>
