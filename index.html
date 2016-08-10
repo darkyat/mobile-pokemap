@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PokéMap | PokémonGO Wien</title>
+	<link rel="canonical" href="https://pokemongo.wien/pokemap/"/>
+	<meta property="og:title" content="Wiener Pokémap | PokemonGO Wien"/>
+	<meta property="og:type" content="activity"/>
+	<meta property="og:url" content="https://pokemongo.wien/pokemap/"/>
+	<meta property="og:site_name" content="PokemonGO Wien"/>
+	<meta property="og:description" content="Die Wiener Pokémap ist ein Verzeichnis aller Pokémon in Wien (und Umgebung)."/>
+	<meta name="twitter:card" content="summary"/>
+	<meta name="twitter:title" content="Wiener Pokémap | PokemonGO Wien"/>
+	<meta name="twitter:description" content="Die Wiener Pokémap ist ein Verzeichnis aller Pokémon in Wien (und Umgebung)."/>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-60612560-8']);
+		_gaq.push(['_trackPageview']);
+		(function () {
+			var ga = document.createElement('script');
+			ga.type = 'text/javascript';
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script type='text/javascript' src='https://pokemongo.wien/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+    <script language="javascript" type="text/javascript">
+    function submitDetailsForm() {
+       $.post( "https://mobilemap.pokemongo.wien/report_discovery.php", $("#reportpokemon").serialize(), function (data) {
+       	  alert( "Danke für deine Mithilfe!" );
+       	  mymap.closePopup();
+       	  getUsers();
+       	  location.reload(true);
+       });
+    }
+    function submitReport(recordid) {
+       $.post( "https://mobilemap.pokemongo.wien/report_wrong.php?recordid=" + recordid, function (data) {
+       	  alert( "Danke für deine Mithilfe!" );
+       	  mymap.closePopup();
+       	  getUsers();
+       	  location.reload(true);
+       });
+    }
+	</script>
+	<script type='text/javascript'>
+		/* <![CDATA[ */
+		var onepress_js_settings = {"onepress_disable_animation":"0","onepress_disable_sticky_header":"0","onepress_vertical_align_menu":"0","hero_animation":"flipInX","hero_speed":"5000"};
+		var tribe_events_linked_posts = {"post_types":{"tribe_venue":"venue","tribe_organizer":"organizer"}};
+		/* ]]> */
+	</script>
+	<script type='text/javascript' src='https://pokemongo.wien/wp-content/themes/onepress/assets/js/plugins.js?ver=1.0.0'></script>
+	<script type='text/javascript' src='https://pokemongo.wien/wp-content/themes/onepress/assets/js/bootstrap.min.js?ver=4.0.0'></script>
+	<script type='text/javascript' src='https://pokemongo.wien/wp-content/themes/onepress/assets/js/theme.js?ver=20120206'></script>
+
+	<link rel="stylesheet" id="onepress-fonts-css" href="https://fonts.googleapis.com/css?family=Raleway%3A400%2C500%2C600%2C700%2C300%2C100%2C800%2C900%7COpen%2BSans%3A400%2C300%2C300italic%2C400italic%2C600%2C600italic%2C700%2C700italic&amp;subset=latin%2Clatin-ext" type="text/css" media="all">
+	<link rel="stylesheet" id="onepress-bootstrap-css" href="https://pokemongo.wien/wp-content/themes/onepress/assets/css/bootstrap.min.css?ver=4.0.0" type="text/css" media="all">
+	<link rel="stylesheet" id="onepress-style-css" href="https://pokemongo.wien/wp-content/themes/onepress/style.css?ver=4.5.3" type="text/css" media="all">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.8/select2-bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://pokemongo.wien/map/css/buttons.css?v=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+	<style>
+	.combobox { width: 100%; }
+	#reportpokemon { min-width: 250px; }
+	</style>
+</head>
+<body>
+	<div id="mapid" style="height: 100vh; width: 100%; position:absolute; left:0;"></div>
+	<script>
+
+		var currenttime = new Date().getHours();
+		var mapid = 'darkyat.104plpmp';
+
+		if (currenttime >= 7 && currenttime < 19)
+		{
+			mapid = 'darkyat.104plpmp';
+		}
+		else
+		{
+			mapid = 'darkyat.12dd8of2';
+		}
+
+		var mymap = L.map('mapid').setView([48.218, 16.342], 12);
+
+		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Pokémon © Pokémon/Nintendo, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+
+			id: mapid,
+			accessToken: 'pk.eyJ1IjoiZGFya3lhdCIsImEiOiJjaXFyM2Ezc3EwMDdraHRtYW5teDUyYnR1In0.dRWn3ouIgbpJ9Tlja_JJvg'
+		}).addTo(mymap);
+
+		/*L.circle([48.218, 16.442], 500, {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5
+		}).addTo(mymap).bindPopup("I am a circle.");*/
+
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent('<form id="reportpokemon" action="report_discovery.php" method="post" enctype="text/plain" class="formstyle1" class="container-fluid"><input type="text" name="name" value="Dein Name" class="form-control"><br><input type="text" name="mail" value="Deine E-Mail (optional)" class="form-control"><br><select name="pokemon" id="pokemon-combo"><option value="1">Bisasam</option><option value="2">Bisaknosp</option><option value="3">Bisaflor</option><option value="4">Glumanda</option><option value="5">Glutexo</option><option value="6">Glurak</option><option value="7">Schiggy</option><option value="8">Schillok</option><option value="9">Turtok</option><option value="10">Raupy</option><option value="11">Safcon</option><option value="12">Smettbo</option><option value="13">Hornliu</option><option value="14">Kokuna</option><option value="15">Bibor</option><option value="16">Taubsi</option><option value="17">Tauboga</option><option value="18">Tauboss</option><option value="19">Rattfratz</option><option value="20">Rattikarl</option><option value="21">Habitak</option><option value="22">Ibitak</option><option value="23">Rettan</option><option value="24">Arbok</option><option value="25">Pikachu</option><option value="26">Raichu</option><option value="27">Sandan</option><option value="28">Sandamer</option><option value="29">Nidoran W</option><option value="30">Nidorina</option><option value="31">Nidoqueen</option><option value="32">Nidoran M</option><option value="33">Nidorino</option><option value="34">Nidoking</option><option value="35">Piepi</option><option value="36">Pixi</option><option value="37">Vulpix</option><option value="38">Vulnona</option><option value="39">Pummeluff</option><option value="40">Knuddeluff</option><option value="41">Zubat</option><option value="42">Golbat</option><option value="43">Myrapla</option><option value="44">Duflor</option><option value="45">Giflor</option><option value="46">Paras</option><option value="47">Parasek</option><option value="48">Bluzuk</option><option value="49">Omot</option><option value="50">Digda</option><option value="51">Digdri</option><option value="52">Mauzi</option><option value="53">Snobilikat</option><option value="54">Enton</option><option value="55">Entoron</option><option value="56">Menki</option><option value="57">Rasaff</option><option value="58">Fukano</option><option value="59">Arkani</option><option value="60">Quapsel</option><option value="61">Quaputzi</option><option value="62">Quappo</option><option value="63">Abra</option><option value="64">Kadabra</option><option value="65">Simsala</option><option value="66">Machollo</option><option value="67">Maschock</option><option value="68">Machomei</option><option value="69">Knofensa</option><option value="70">Ultrigaria</option><option value="71">Sarzenia</option><option value="72">Tentacha</option><option value="73">Tentoxa</option><option value="74">Kleinstein</option><option value="75">Georok</option><option value="76">Geowaz</option><option value="77">Ponita</option><option value="78">Gallopa</option><option value="79">Flegmon</option><option value="80">Lahmus</option><option value="81">Magnetilo</option><option value="82">Magneton</option><option value="83">Porenta</option><option value="84">Dodu</option><option value="85">Dodri</option><option value="86">Jurob</option><option value="87">Jugong</option><option value="88">Sleima</option><option value="89">Sleimok</option><option value="90">Muschas</option><option value="91">Austos</option><option value="92">Nebulak</option><option value="93">Alpollo</option><option value="94">Gengar</option><option value="95">Onix</option><option value="96">Traumato</option><option value="97">Hypno</option><option value="98">Krabby</option><option value="99">Kingler</option><option value="100">Voltobal</option><option value="101">Lektrobal</option><option value="102">Owei</option><option value="103">Kokowei</option><option value="104">Tragosso</option><option value="105">Knogga</option><option value="106">Kicklee</option><option value="107ockchan</option><option value="108">Schlurp</option><option value="109">Smogon</option><option value="110">Smogmog</option><option value="111">Rihorn</option><option value="112">Rizeros</option><option value="113">Chaneira</option><option value="114">Tangela</option><option value="115">Kangama</option><option value="116">Seeper</option><option value="117">Seemon</option><option value="118">Goldini</option><option value="119">Golking</option><option value="120">Sterndu</option><option value="121">Starmie</option><option value="122">Pantimos</option><option value="123">Sichlor</option><option value="124">Rossana</option><option value="125">Elektek</option><option value="126">Magmar</option><option value="127">Pinsir</option><option value="128">Tauros</option><option value="129">Karpador</option><option value="130">Garados</option><option value="131">Lapras</option><option value="133">Evoli</option><option value="134">Aquana</option><option value="135">Blitza</option><option value="136">Flamara</option><option value="137">Porygon</option><option value="138">Amonitas</option><option value="139">Amoroso</option><option value="140">Kabuto</option><option value="141">Kabutops</option><option value="142">Aerodactyl</option><option value="143">Relaxo</option><option value="147">Dratini</option><option value="148">Dragonir</option><option value="149">Dragoran</option></select><input type="text" name="lat" value="' + e.latlng.lat.toString() + '" hidden><input type="text" name="lng" value="' + e.latlng.lng.toString() + '" hidden><br><select name="daynight" id="daynight-combo"><option value="1">Tag</option><option value="2">Nacht</option></select><br/><input type="button" value="Send" onClick="submitDetailsForm()"></form>')
+				.openOn(mymap);
+				$('#pokemon-combo').select2({ theme: "bootstrap"});
+				$('#daynight-combo').select2({ theme: "bootstrap"});
+		}
+
+		mymap.on('click', onMapClick);
+
+	      function getUsers() {
+	        $.getJSON("https://mobilemap.pokemongo.wien/get_marker_api.php?callback=?", function (data) {
+	          for (var i = 0; i < data.length; i++) {
+	            var location = new L.LatLng(data[i].lat, data[i].lng);
+	            var pokemonid = data[i].pokemonid;
+	            var addtime = data[i].addtime;
+	            var addname = data[i].addname;
+	            if (addname == 'Dein Name') 
+	            {
+	            	addname = "einem unbekannten Gast";
+	            }
+	            var pokename = data[i].pokename;
+	            var daynight = data[i].daynight;
+	            var title = "<div style='font-size: 18px; color: #0078A8;'>"+ data[i].pokemonid +"</div>";
+	            var pokeicon = L.icon({
+	            	iconUrl: "https://mobilemap.pokemongo.wien/icon/" + data[i].pokemonid + ".png"
+	            });
+	            var recordid = data[i].recordid;
+	            var marker = new L.Marker(location, {
+	              title: pokename,
+	              icon: pokeicon
+	            });
+	            marker.bindPopup("<div style='text-align: center; margin-left: auto; margin-right: auto;'><h4>" + pokename + "</h4>Hinzugefügt am <b> " + addtime +"</b><br/>von " + addname + "<br/><br/><input type='button' class='button flag' name='report' value='Melden' onClick='submitReport(" + recordid + ")'></input></div>", {maxWidth: '400'});
+	            mymap.addLayer(marker);
+	          }
+	        }).complete(function() {
+	          if (firstLoad == true) {
+	            map.fitBounds(mymap.getBounds());
+	            firstLoad = false;
+	          };
+	        });
+	      }
+
+	$(document).ready(function() {
+        $.ajaxSetup({cache:false});
+        $('#map').css('height', ($(window).height() - 40));
+        getUsers();
+      });
+	</script>
+</body>
+</html>
