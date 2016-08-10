@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "wien.pokemongo.map"
+    versionCode = "10"
+    version     = "0.0.1" >
+
+<!-- versionCode is optional and Android only -->
+
+  <name>PokeMap</name>
+
+  <description>
+      Die Pokemap der Wiener PokemonGO Community.
+  </description>
+
+  <author href="https://pokemongo.wien" email="admin@darky.at">
+      Harald Haas
+  </author>
+
+  <access origin="*" />
+
+</widget>
