@@ -19,5 +19,6 @@
 
   <!-- We'll include the Barcode plugin as an example -->
   <plugin name="cordova-plugin-whitelist" />
+  <plugin name="com.danielcwilson.plugins.googleanalytics" spec="0.6.1" source="pgb" />
 
 </widget>
