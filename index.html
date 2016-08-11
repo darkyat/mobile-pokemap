@@ -11,26 +11,27 @@
 	<meta name="twitter:card" content="summary"/>
 	<meta name="twitter:title" content="Wiener Pokémap | PokemonGO Wien"/>
 	<meta name="twitter:description" content="Die Wiener Pokémap ist ein Verzeichnis aller Pokémon in Wien (und Umgebung)."/>
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-60612560-8']);
-		_gaq.push(['_trackPageview']);
-		(function () {
-			var ga = document.createElement('script');
-			ga.type = 'text/javascript';
-			ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0];
-			s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script type='text/javascript' src='https://pokemongo.wien/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
     <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    // Wait for device API libraries to load
+    //
+    function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+	window.analytics.startTrackerWithId('UA-37429837-2');
+        window.analytics.trackView('Map');
+    }
+    </script>
     <script language="javascript" type="text/javascript">
     function submitDetailsForm() {
        $.post( "https://mobilemap.pokemongo.wien/report_discovery.php", $("#reportpokemon").serialize(), function (data) {
@@ -72,7 +73,7 @@
 	#reportpokemon { min-width: 250px; }
 	</style>
 </head>
-<body>
+<body onload="onLoad()">
 	<div id="mapid" style="height: 100vh; width: 100%; position:absolute; left:0;"></div>
 	<script>
 
