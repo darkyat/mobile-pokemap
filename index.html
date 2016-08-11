@@ -67,7 +67,9 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.8/select2-bootstrap.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://pokemongo.wien/map/css/buttons.css?v=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.52.0/L.Control.Locate.min.css" />
+        <script src="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.52.0/L.Control.Locate.min.js" charset="utf-8"></script>
 	<style>
 	.combobox { width: 100%; }
 	#reportpokemon { min-width: 250px; }
@@ -89,8 +91,14 @@
 			mapid = 'darkyat.12dd8of2';
 		}
 
-		var mymap = L.map('mapid').setView([48.218, 16.342], 12);
-                mymap.locate({setView: true, maxZoom: 16});
+                function onLocationError(e) {
+                        lc.stop();
+                }
+
+                var mymap = L.map('mapid').setView([48.218, 16.342], 12);
+                mymap.on('locationerror', onLocationError)
+                var lc = L.control.locate().addTo(mymap);
+                lc.start();
 
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 			maxZoom: 18,
