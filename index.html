@@ -67,7 +67,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.8/select2-bootstrap.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://pokemongo.wien/map/css/buttons.css?v=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.52.0/L.Control.Locate.min.css" />
         <script src="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.52.0/L.Control.Locate.min.js" charset="utf-8"></script>
 	<style>
@@ -117,6 +117,7 @@
 			fillOpacity: 0.5
 		}).addTo(mymap).bindPopup("I am a circle.");*/
 
+                var layerControl = false;
 		var popup = L.popup();
 
 		function onMapClick(e) {
@@ -166,7 +167,7 @@
 
                     if(layerControl === false) {
                                 layerControl = L.control.layers().addTo(mymap);
-                        }
+                    }
 	          }
                   layerControl.addOverlay(dayLayerGroup, "Tag (7-19 Uhr)");
                   layerControl.addOverlay(nightLayerGroup, "Nacht (19-7 Uhr)");
