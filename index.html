@@ -36,16 +36,16 @@
        $.post( "https://mobilemap.pokemongo.wien/report_discovery.php", $("#reportpokemon").serialize(), function (data) {
        	  alert( "Danke für deine Mithilfe!" );
        	  mymap.closePopup();
+          clearMap();
        	  getUsers();
-       	  location.reload(true);
        });
     }
     function submitReport(recordid) {
        $.post( "https://mobilemap.pokemongo.wien/report_wrong.php?recordid=" + recordid, function (data) {
        	  alert( "Danke für deine Mithilfe!" );
        	  mymap.closePopup();
+          clearMap();
        	  getUsers();
-       	  location.reload(true);
        });
     }
 	</script>
@@ -152,6 +152,10 @@
 	          };
 	        });
 	      }
+        function clearMap() {
+                map.removeLayer(dayLayerGroup);
+                map.removeLayer(nightLayerGroup);
+        }
 
 	$(document).ready(function() {
         $.ajaxSetup({cache:false});
