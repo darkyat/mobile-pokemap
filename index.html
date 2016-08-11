@@ -132,6 +132,8 @@
 
 	      function getUsers() {
 	        $.getJSON("https://mobilemap.pokemongo.wien/get_marker_api.php?callback=?", function (data) {
+                  dayLayerGroup = L.layerGroup();
+                  nightLayerGroup = L.layerGroup();
 	          for (var i = 0; i < data.length; i++) {
 	            var location = new L.LatLng(data[i].lat, data[i].lng);
 	            var pokemonid = data[i].pokemonid;
@@ -153,8 +155,29 @@
 	              icon: pokeicon
 	            });
 	            marker.bindPopup("<div style='text-align: center; margin-left: auto; margin-right: auto;'><h4>" + pokename + "</h4>Hinzugefügt am <b> " + addtime +"</b><br/>von " + addname + "<br/><br/><input type='button' class='button flag' name='report' value='Melden' onClick='submitReport(" + recordid + ")'></input></div>", {maxWidth: '400'});
-	            mymap.addLayer(marker);
+                    if (daynight == "1")
+                    {
+                        dayLayerGroup.addLayer(marker);
+                    }
+                    else
+                    {
+                        nightLayerGroup.addLayer(marker);
+                    }
+
+                    if(layerControl === false) {
+                                layerControl = L.control.layers().addTo(mymap);
+                        }
 	          }
+                  layerControl.addOverlay(dayLayerGroup, "Tag (7-19 Uhr)");
+                  layerControl.addOverlay(nightLayerGroup, "Nacht (19-7 Uhr)");
+                  if (dayornight == 1)
+                  {
+                        dayLayerGroup.addTo(mymap);
+                  }
+                  else
+                  {
+                        nightLayerGroup.addTo(mymap);
+                  }
 	        }).complete(function() {
 	          if (firstLoad == true) {
 	            map.fitBounds(mymap.getBounds());
