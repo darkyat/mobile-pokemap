@@ -81,14 +81,17 @@
 
 		var currenttime = new Date().getHours();
 		var mapid = 'darkyat.104plpmp';
+		var dayornight = 1;
 
 		if (currenttime >= 7 && currenttime < 19)
 		{
 			mapid = 'darkyat.104plpmp';
+			dayornight = 1;
 		}
 		else
 		{
 			mapid = 'darkyat.12dd8of2';
+			dayornight = 2;
 		}
 
                 function onLocationError(e) {
